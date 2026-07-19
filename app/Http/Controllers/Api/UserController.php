@@ -11,7 +11,11 @@ class UserController extends Controller
 {
     public function index()
     {
-        return response()->json(User::all());
+        $user = User::all();
+        return response()->json([
+            'message' => 'User retrieved successfully',
+            'data' => $user,
+        ], 201);
     }
 
     public function store(Request $request)
@@ -22,7 +26,7 @@ class UserController extends Controller
                 'location' => 'required',
                 'username' => 'required',
                 'email' => 'required | email | unique:users,email',
-                'password' => 'required | min:6',
+                'password' => 'required | min:6'
             ],
             [
                 'nik.required' => 'NIK is required.',
@@ -47,6 +51,7 @@ class UserController extends Controller
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'is_active' => true
         ]);
 
         return response()->json([
@@ -88,6 +93,7 @@ class UserController extends Controller
                 'username' => 'required',
                 'email' => 'required | email | unique:users,email,' . $id,
                 'password' => 'nullable | min:6',
+                'is_active' => 'required | boolean',
             ],
             [
                 'nik.required' => 'NIK is required.',
@@ -103,6 +109,9 @@ class UserController extends Controller
 
                 'password.required' => 'Password is required.',
                 'password.min' => 'Password must be at least 6 characters.',
+
+                'is_active.required' => 'Status is required.',
+                'is_active.boolean' => 'Status must be true or false.',
             ]
         );
 
@@ -110,6 +119,7 @@ class UserController extends Controller
         $user->location = $validated['location'];
         $user->username = $validated['username'];
         $user->email = $validated['email'];
+        $user->is_active = $validated['is_active'];
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
