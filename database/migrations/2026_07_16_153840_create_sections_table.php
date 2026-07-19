@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\Location;
+
 return new class extends Migration
 {
     /**
@@ -11,16 +13,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('sections', function (Blueprint $table) {
             $table->id();
-            $table->string('nik')->unique();
-            $table->string('location');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string('name')->unique();
             $table->boolean('is_active');
             $table->timestamps();
         });
+    }
+
+
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
     }
 
     /**
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sections');
     }
 };

@@ -11,16 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->string('nik')->unique();
-            $table->string('location');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->foreignId('location_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->string('name');
             $table->boolean('is_active');
             $table->timestamps();
         });
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 
     /**
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('positions');
     }
 };
