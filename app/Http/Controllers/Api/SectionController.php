@@ -42,7 +42,6 @@ class SectionController extends Controller
     public function show(string $id)
     {
         $section = Section::find($id);
-
         if (!$section) {
             return response()->json([
                 'message' => 'Section not found'
@@ -59,7 +58,6 @@ class SectionController extends Controller
     {
 
         $section = Section::find($id);
-
         if (!$section) {
             return response()->json([
                 'message' => 'Section not found'

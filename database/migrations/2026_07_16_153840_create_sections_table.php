@@ -21,12 +21,6 @@ return new class extends Migration
         });
     }
 
-
-    public function locations()
-    {
-        return $this->hasMany(Location::class);
-    }
-
     /**
      * Reverse the migrations.
      */

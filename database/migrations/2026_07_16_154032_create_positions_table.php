@@ -23,11 +23,6 @@ return new class extends Migration
         });
     }
 
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
-    }
-
     /**
      * Reverse the migrations.
      */

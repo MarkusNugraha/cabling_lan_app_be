@@ -23,17 +23,6 @@ return new class extends Migration
         });
     }
 
-
-    public function section()
-    {
-        return $this->belongsTo(Section::class);
-    }
-
-    public function positions()
-    {
-        return $this->hasMany(Position::class);
-    }
-
     /**
      * Reverse the migrations.
      */
