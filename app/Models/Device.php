@@ -20,4 +20,24 @@ class Device extends Model
     {
         return $this->belongsTo(DeviceCategory::class);
     }
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
+    public function networkSwitch()
+    {
+        return $this->hasOne(NetworkSwitch::class);
+    }
+
+    public function voip()
+    {
+        return $this->hasOne(Voip::class);
+    }
+
+    public function computer()
+    {
+        return $this->hasOne(Computer::class);
+    }
 }
