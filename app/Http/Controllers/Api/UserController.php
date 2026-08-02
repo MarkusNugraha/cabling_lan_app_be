@@ -15,18 +15,18 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User retrieved successfully',
             'data' => $user,
-        ], 201);
+        ], 200);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(
             [
-                'nik' => 'required | unique:users,nik',
+                'nik' => 'required|unique:users,nik',
                 'location' => 'required',
                 'username' => 'required',
-                'email' => 'required | email | unique:users,email',
-                'password' => 'required | min:6'
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6'
             ],
             [
                 'nik.required' => 'NIK is required.',
@@ -88,12 +88,12 @@ class UserController extends Controller
 
         $validated = $request->validate(
             [
-                'nik' => 'required | unique:users,nik,' . $id,
+                'nik' => 'required|unique:users,nik,' . $id,
                 'location' => 'required',
                 'username' => 'required',
-                'email' => 'required | email | unique:users,email,' . $id,
-                'password' => 'nullable | min:6',
-                'is_active' => 'required | boolean',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'password' => 'nullable|min:6',
+                'is_active' => 'required|boolean',
             ],
             [
                 'nik.required' => 'NIK is required.',

@@ -14,14 +14,14 @@ class SectionController extends Controller
         return response()->json([
             'message' => 'Section retrieved successfully',
             'data' => $section,
-        ], 201);
+        ], 200);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(
             [
-                'name' => 'required | unique:sections,name',
+                'name' => 'required|unique:sections,name',
             ],
             [
                 'name.required' => 'Section name is required.',
@@ -66,12 +66,14 @@ class SectionController extends Controller
 
         $validated = $request->validate(
             [
-                'name' => 'required | unique:sections,name,' . $id,
-                'is_active' => 'required | boolean'
+                'name' => 'required|unique:sections,name,' . $id,
+                'is_active' => 'required|boolean'
             ],
             [
                 'name.required' => 'Section name is required.',
-                'is_active.required' => 'Section status is required.'
+
+                'is_active.required' => 'Section status is required.',
+                'is_active.boolean' => 'Section status must be true or false.'
             ]
         );
 

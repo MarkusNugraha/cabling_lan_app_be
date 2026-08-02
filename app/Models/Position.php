@@ -16,4 +16,9 @@ class Position extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
+    }
 }

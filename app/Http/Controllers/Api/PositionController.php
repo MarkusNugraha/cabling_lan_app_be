@@ -16,14 +16,14 @@ class PositionController extends Controller
         return response()->json([
             'message' => 'Position retrieved successfully',
             'data' => $position,
-        ], 201);
+        ], 200);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(
             [
-                'location_id' => 'required | exists:locations,id',
+                'location_id' => 'required|exists:locations,id',
                 'name' => [
                     'required',
                     Rule::unique('positions')->where(function ($query) use ($request) {
@@ -79,7 +79,7 @@ class PositionController extends Controller
 
         $validated = $request->validate(
             [
-                'location_id' => 'required | exists:locations,id',
+                'location_id' => 'required|exists:locations,id',
                 'name' => [
                     'required',
                     Rule::unique('positions')
@@ -88,7 +88,7 @@ class PositionController extends Controller
                         })
                         ->ignore($id),
                 ],
-                'is_active' => 'required | boolean'
+                'is_active' => 'required|boolean'
             ],
             [
                 'location_id.required' => 'Location is required.',
@@ -97,7 +97,8 @@ class PositionController extends Controller
                 'name.required' => 'Position name is required.',
                 'name.unique' => 'This location is already registered.',
 
-                'is_active.required' => 'Position status is required.'
+                'is_active.required' => 'Position status is required.',
+                'is_active.boolean' => 'Position status must be true or false.'
             ]
         );
 
