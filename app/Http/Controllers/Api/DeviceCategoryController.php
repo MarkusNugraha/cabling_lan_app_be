@@ -16,14 +16,14 @@ class DeviceCategoryController extends Controller
         return response()->json([
             'message' => 'Device Category retrieved successfully',
             'data' => $deviceCategory,
-        ], 201);
+        ], 200);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(
             [
-                'name' => 'required | unique:device_categories,name',
+                'name' => 'required|unique:device_categories,name',
             ],
             [
                 'name.required' => 'Device Category name is required.',
@@ -68,15 +68,15 @@ class DeviceCategoryController extends Controller
 
         $validated = $request->validate(
             [
-                'name' => 'required | unique:device_categories,name,' . $id,
-                'is_active' => 'required | boolean'
+                'name' => 'required|unique:device_categories,name,' . $id,
+                'is_active' => 'required|boolean'
             ],
             [
                 'name.required' => 'Device Category name is required.',
                 'name.unique' => 'This device category is already registered.',
 
-                'is_active.required' => 'Status is required.',
-                'is_active.boolean' => 'Status must be true or false.',
+                'is_active.required' => 'Device Category Status is required.',
+                'is_active.boolean' => 'Device Category Status must be true or false.',
             ]
         );
 
