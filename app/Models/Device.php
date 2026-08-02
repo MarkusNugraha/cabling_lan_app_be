@@ -11,8 +11,9 @@ class Device extends Model
         'pc_name',
         'serial_number',
         'device_category_id',
-        'detail',
-        'is_active',
+        'position_id',
+        'note',
+        'is_active'
     ];
 
     public function deviceCategory()

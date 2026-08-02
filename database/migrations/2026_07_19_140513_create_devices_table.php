@@ -20,7 +20,12 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
-            $table->string('detail')->nullable();
+            $table->foreignId('position_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->string('note')->nullable();
+            //active
             $table->boolean('is_active');
             $table->timestamps();
         });
