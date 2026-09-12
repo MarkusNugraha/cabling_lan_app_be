@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\SwitchController;
 use App\Http\Controllers\Api\SwitchPortController;
 use App\Http\Controllers\Api\VoipController;
 use App\Http\Controllers\Api\ComputerController;
+use App\Http\Controllers\Api\CableController;
 
 
 Route::apiResource('user', UserController::class);
@@ -27,3 +28,4 @@ Route::apiResource('switch', SwitchController::class);
 Route::apiResource('switch_port', SwitchPortController::class);
 Route::apiResource('voip', VoipController::class);
 Route::apiResource('computer', ComputerController::class);
+Route::apiResource('cable', CableController::class);
