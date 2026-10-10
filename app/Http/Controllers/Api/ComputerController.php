@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Computer;
+use App\Services\DeviceService;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 class ComputerController extends Controller
 {
+    public function __construct(private DeviceService $deviceService) {}
     public function index()
     {
         $computers = Computer::all();
@@ -22,7 +24,15 @@ class ComputerController extends Controller
     {
         $validated = $request->validate(
             [
-                'device_id' => 'required|exists:devices,id',
+                // Device Validation
+                'id_asset' => 'required|unique:devices',
+                'pc_name' => 'nullable|unique:devices',
+                'serial_number' => 'required|unique:devices',
+                'device_category_id' => 'required|exists:device_categories,id',
+                'position_id' => 'required|exists:positions,id',
+
+                // Computer Validation
+                // 'device_id' => 'required|exists:devices,id',
                 'hostname' => 'required|unique:computers',
                 'cpu' => 'required',
                 'ram_gb' => 'required|integer',
@@ -35,8 +45,24 @@ class ComputerController extends Controller
                 'model' => 'required',
             ],
             [
-                'device_id.required' => 'Device ID is required.',
-                'device_id.exists' => 'Device not found.',
+                // Device Validation
+                'id_asset.required' => 'ID Asset is required.',
+                'id_asset.unique' => 'This ID Asset is already registered.',
+
+                'pc_name.unique' => 'This PC Name is already registered.',
+
+                'serial_number.required' => 'Serial Number is required.',
+                'serial_number.unique' => 'This Serial Number is already registered.',
+
+                'device_category_id.required' => 'Device Category ID is required.',
+                'device_category_id.exists' => 'Device Category not found.',
+
+                'position_id.required' => 'Position ID is required.',
+                'position_id.exists' => 'Position not found.',
+
+                // Computer Validation
+                // 'device_id.required' => 'Device ID is required.',
+                // 'device_id.exists' => 'Device not found.',
 
                 'hostname.required' => 'Hostname is required.',
                 'hostname.unique' => 'Hostname already exists.',
@@ -65,8 +91,11 @@ class ComputerController extends Controller
             ]
         );
 
+        $device = $this->deviceService->create($validated);
+
         $computer = Computer::create([
-            'device_id' => $validated['device_id'],
+            'device_id' => $device->id,
+            // 'device_id' => $validated['device_id'],
             'hostname' => $validated['hostname'],
             'cpu' => $validated['cpu'],
             'ram_gb' => $validated['ram_gb'],
@@ -149,8 +178,8 @@ class ComputerController extends Controller
 
                 'model.required' => 'Model is required.',
 
-                'is_active.required' => 'Computer status is required.',
-                'is_active.boolean' => 'Computer status must be a boolean.'
+                'is_active.required' => 'Computer Status is required.',
+                'is_active.boolean' => 'Computer Status must be true or false.'
             ]
         );
 
