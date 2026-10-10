@@ -85,8 +85,8 @@ class VlanController extends Controller
                 'name.required' => 'Name is required.',
                 'name.unique' => 'This name is already registered.',
 
-                'is_active.required' => 'Vlan Status is required.',
-                'is_active.boolean' => 'Vlan Status must be true or false.',
+                'is_active.required' => 'Vlan status is required.',
+                'is_active.boolean' => 'Vlan status must be true or false.',
             ]
         );
 

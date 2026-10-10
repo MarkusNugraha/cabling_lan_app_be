@@ -72,8 +72,8 @@ class SectionController extends Controller
             [
                 'name.required' => 'Section name is required.',
 
-                'is_active.required' => 'Section status is required.',
-                'is_active.boolean' => 'Section status must be true or false.'
+                'is_active.required' => 'Section Status is required.',
+                'is_active.boolean' => 'Section Status must be true or false.'
             ]
         );
 

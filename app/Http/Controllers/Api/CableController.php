@@ -89,7 +89,7 @@ class CableController extends Controller
                 'to_device_id.exists' => 'To Device not found.',
 
                 'is_active.required' => 'Cable Status is required.',
-                'is_active.boolean' => 'Cable Status must be a boolean.',
+                'is_active.boolean' => 'Cable Status must be true or false.',
             ]
         );
 

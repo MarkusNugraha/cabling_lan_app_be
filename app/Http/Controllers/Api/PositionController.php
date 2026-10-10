@@ -97,8 +97,8 @@ class PositionController extends Controller
                 'name.required' => 'Position name is required.',
                 'name.unique' => 'This location is already registered.',
 
-                'is_active.required' => 'Position status is required.',
-                'is_active.boolean' => 'Position status must be true or false.'
+                'is_active.required' => 'Position Status is required.',
+                'is_active.boolean' => 'Position Status must be true or false.'
             ]
         );
 
