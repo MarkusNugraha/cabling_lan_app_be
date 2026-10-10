@@ -10,13 +10,51 @@ use Illuminate\Validation\Rule;
 
 class LocationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $location = Location::all();
+        // if ($request->query('is_active') === 'true') {
+        //     $request->merge(['is_active' => true]);
+        // } elseif ($request->query('is_active') === 'false') {
+        //     $request->merge(['is_active' => false]);
+        // }
+        $validated = $request->validate(
+            [
+                'name' => 'nullable',
+                'section_id' => 'nullable|exists:sections,id',
+                'is_active' => 'nullable|boolean',
+            ],
+            [
+                'section_id.exists' => 'Section not found.',
+                'is_active.boolean' => 'Location Status must be true or false.',
+            ]
+        );
+
+        $query = Location::query();
+        if (!empty($validated['name'])) {
+            $query->where(
+                'name',
+                'ILIKE',
+                '%' . $validated['name'] . '%'
+            );
+        }
+        if (!empty($validated['section_id'])) {
+            $query->where(
+                'section_id',
+                $validated['section_id']
+            );
+        }
+        if (
+            array_key_exists('is_active', $validated) &&
+            $validated['is_active'] !== null
+        ) {
+            $query->where('is_active', $validated['is_active']);
+        }
+
+        $locations = $query->get();
         return response()->json([
-            'message' => 'Location retrieved successfully',
-            'data' => $location,
-        ], 200);
+            'message' => 'Locations retrieved successfully.',
+            'data' => $locations,
+        ]);
     }
 
     public function store(Request $request)
@@ -97,8 +135,8 @@ class LocationController extends Controller
                 'name.required' => 'Location name is required.',
                 'name.unique' => 'This location is already registered.',
 
-                'is_active.required' => 'Location status is required.',
-                'is_active.boolean' => 'Location status must be true or false.'
+                'is_active.required' => 'Location Status is required.',
+                'is_active.boolean' => 'Location Status must be true or false.'
 
             ]
         );

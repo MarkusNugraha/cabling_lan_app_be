@@ -9,9 +9,49 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::all();
+        // $user = User::all();
+        // return response()->json([
+        //     'message' => 'User retrieved successfully',
+        //     'data' => $user,
+        // ], 200);
+
+        $validated = $request->validate(
+            [
+                'search' => 'nullable',
+                'location' => 'nullable',
+                'is_active' => 'nullable|boolean',
+            ],
+            [
+                'is_active.boolean' => 'User Status must be true or false.',
+            ]
+        );
+
+        $query = User::query();
+        if (!empty($validated['search'])) {
+            $search = $validated['search'];
+            $query->where(function ($query) use ($search) {
+                $query->where('nik', 'ILIKE', "%{$search}%")
+                    ->orWhere('username', 'ILIKE', "%{$search}%")
+                    ->orWhere('email', 'ILIKE', "%{$search}%");
+            });
+        }
+        if (!empty($validated['location'])) {
+            $query->where(
+                'location',
+                'ILIKE',
+                '%' . $validated['location'] . '%'
+            );
+        }
+        if (
+            array_key_exists('is_active', $validated) &&
+            $validated['is_active'] !== null
+        ) {
+            $query->where('is_active', $validated['is_active']);
+        }
+
+        $user = $query->get();
         return response()->json([
             'message' => 'User retrieved successfully',
             'data' => $user,
@@ -110,8 +150,8 @@ class UserController extends Controller
                 'password.required' => 'Password is required.',
                 'password.min' => 'Password must be at least 6 characters.',
 
-                'is_active.required' => 'Status is required.',
-                'is_active.boolean' => 'Status must be true or false.',
+                'is_active.required' => 'User Status is required.',
+                'is_active.boolean' => 'User Status must be true or false.',
             ]
         );
 
