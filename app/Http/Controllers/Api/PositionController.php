@@ -10,13 +10,45 @@ use Illuminate\Validation\Rule;
 
 class PositionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $position = Position::all();
+        $validated = $request->validate(
+            [
+                'search' => 'nullable',
+                'location_id' => 'nullable|exists:locations,id',
+                'is_active' => 'nullable|boolean',
+            ],
+            [
+                'location_id.exists' => 'Location not found.',
+                'is_active.boolean' => 'Position Status must be true or false.',
+            ]
+        );
+
+        $query = Position::query();
+        if (!empty($validated['search'])) {
+            $search = $validated['search'];
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'ILIKE', "%{$search}%");
+            });
+        }
+        if (!empty($validated['location_id'])) {
+            $query->where(
+                'location_id',
+                $validated['location_id']
+            );
+        }
+        if (
+            array_key_exists('is_active', $validated) &&
+            $validated['is_active'] !== null
+        ) {
+            $query->where('is_active', $validated['is_active']);
+        }
+
+        $positions = $query->get();
         return response()->json([
-            'message' => 'Position retrieved successfully',
-            'data' => $position,
-        ], 200);
+            'message' => 'Positions retrieved successfully.',
+            'data' => $positions,
+        ]);
     }
 
     public function store(Request $request)

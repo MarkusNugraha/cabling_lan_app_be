@@ -12,14 +12,9 @@ class LocationController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->query('is_active') === 'true') {
-        //     $request->merge(['is_active' => true]);
-        // } elseif ($request->query('is_active') === 'false') {
-        //     $request->merge(['is_active' => false]);
-        // }
         $validated = $request->validate(
             [
-                'name' => 'nullable',
+                'search' => 'nullable',
                 'section_id' => 'nullable|exists:sections,id',
                 'is_active' => 'nullable|boolean',
             ],
@@ -30,12 +25,11 @@ class LocationController extends Controller
         );
 
         $query = Location::query();
-        if (!empty($validated['name'])) {
-            $query->where(
-                'name',
-                'ILIKE',
-                '%' . $validated['name'] . '%'
-            );
+        if (!empty($validated['search'])) {
+            $search = $validated['search'];
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'ILIKE', "%{$search}%");
+            });
         }
         if (!empty($validated['section_id'])) {
             $query->where(

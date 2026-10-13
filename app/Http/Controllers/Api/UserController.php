@@ -11,12 +11,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        // $user = User::all();
-        // return response()->json([
-        //     'message' => 'User retrieved successfully',
-        //     'data' => $user,
-        // ], 200);
-
         $validated = $request->validate(
             [
                 'search' => 'nullable',
